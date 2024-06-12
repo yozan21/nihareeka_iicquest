@@ -5,8 +5,10 @@ import { councelerReducer } from "./councelerSlice";
 import { adminReducer } from "./adminSlice";
 import { normalUserReducer } from "./normalUserSlice";
 import { userReducer } from "./userSlice";
+import { authReducer } from "./authSlice";
 
 const rootReducer=combineReducers({
+    auth:authReducer,
     loading:loadingReducer,
     counceler:councelerReducer,
     admin:adminReducer,
