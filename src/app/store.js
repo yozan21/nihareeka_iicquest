@@ -6,6 +6,7 @@ import { adminReducer } from "./adminSlice";
 import { normalUserReducer } from "./normalUserSlice";
 import { userReducer } from "./userSlice";
 import { authReducer } from "./authSlice";
+import { postReducer } from "./postsSlice";
 
 const rootReducer=combineReducers({
     auth:authReducer,
@@ -13,7 +14,8 @@ const rootReducer=combineReducers({
     counceler:councelerReducer,
     admin:adminReducer,
     normalUser:normalUserReducer,
-    user:userReducer
+    user:userReducer,
+    post:postReducer
 })
 
 export const store=configureStore({

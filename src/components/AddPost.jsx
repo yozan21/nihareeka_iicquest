@@ -1,14 +1,37 @@
 import React, { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import uploadInsertImage from '../images/inputImage.png';
-
+import { postDbService } from '../Appwrite Services/database/postDbService';
+import { storageService } from '../Appwrite Services/Storage/storage';
+import { useSelector,useDispatch } from 'react-redux';
+import { postActions } from '../app/postsSlice';
+import { authService } from '../Appwrite Services/Authentication/authentication';
 function AddPost() {
     // const fileInputRef = useRef(null);
+    const {posts}=useSelector(state=>state.post)
+    console.log(posts)
     const [imagePreview, setImagePreview] = useState(uploadInsertImage);
     const { register, handleSubmit, formState: { errors } } = useForm();
-
-    const submitdata = data => {
-        console.log(data);
+    const dispatch=useDispatch()
+    const submitdata =async data => {
+        let fileId=null
+        if(data.image){
+            const newFile=await storageService.uploadImage(data.image[0])
+            if(newFile) fileId=newFile.$id
+        }
+        const accountDetails=await authService.getCurrentUser()
+        if(accountDetails){
+            const newPost=await postDbService.createPost({
+                accountId:accountDetails.$id,
+                date:new Date().toLocaleDateString(),
+                imgId:fileId,
+                content:data.problem,
+                isAnonymous:data.anonymous
+            })
+            if(newPost){
+                dispatch(postActions.addPost(newPost))
+            }
+        }
     };
 
     const handleImageClick = () => {

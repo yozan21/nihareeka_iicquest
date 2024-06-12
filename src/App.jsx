@@ -12,6 +12,8 @@ import { userDbService } from "./Appwrite Services/database/userDbService"
 import { userActions } from "./app/userSlice"
 import { authActions } from "./app/authSlice"
 import { loadingActions } from "./app/loadingSlice"
+import { postDbService } from "./Appwrite Services/database/postDbService"
+import { postActions } from "./app/postsSlice"
 function App() {
   const dispatch=useDispatch()
   const users=useSelector(state=>state.user.users)
@@ -27,6 +29,8 @@ function App() {
         dispatch(normalUserActions.loadAllNormalUsers(allNormalUsers))
         const allUsers=await userDbService.getAllUsers()
         dispatch(userActions.loadAllUsers(allUsers))
+        const allPosts=await postDbService.getAllPosts()
+        dispatch(postActions.loadAllPosts())
       } catch (error) {
         console.log(error)
       }
