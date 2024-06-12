@@ -8,8 +8,6 @@ import { postActions } from '../app/postsSlice';
 import { authService } from '../Appwrite Services/Authentication/authentication';
 function AddPost() {
     // const fileInputRef = useRef(null);
-    const {posts}=useSelector(state=>state.post)
-    console.log(posts)
     const [imagePreview, setImagePreview] = useState(uploadInsertImage);
     const { register, handleSubmit, formState: { errors } } = useForm();
     const dispatch=useDispatch()

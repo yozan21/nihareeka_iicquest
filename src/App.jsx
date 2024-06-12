@@ -25,12 +25,12 @@ function App() {
         const allCouncelers=await councelerDbService.getAllCouncelers()
         dispatch(councelerActions.loadAllCounceler(allCouncelers))
         const allNormalUsers=await normalUserDbService.getAllNormalUsers()
-        console.log(allNormalUsers)
         dispatch(normalUserActions.loadAllNormalUsers(allNormalUsers))
         const allUsers=await userDbService.getAllUsers()
+        console.log(allUsers)
         dispatch(userActions.loadAllUsers(allUsers))
         const allPosts=await postDbService.getAllPosts()
-        dispatch(postActions.loadAllPosts())
+        dispatch(postActions.loadAllPosts(allPosts))
       } catch (error) {
         console.log(error)
       }

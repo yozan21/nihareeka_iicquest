@@ -1,6 +1,6 @@
 import { Client,Databases,ID } from "appwrite";
 
-class UserDbService{
+class CommentDbService{
     constructor(){
         this.client=new Client().
         setEndpoint(import.meta.env.VITE_Appwrite_app_url).
@@ -9,31 +9,29 @@ class UserDbService{
         this.database=new Databases(this.client)
     }
 
-    async createUser({accountId,accountType,userId}){
+    async createComment({belongsTo,commentor}){
         try {
-            const newUser=await this.database.createDocument(
+            const newCommit=this.database.createDocument(
                 import.meta.env.VITE_Appwrite_app_database_id,
-                import.meta.env.VITE_Appwrite_app_collection_user_id,
+                import.meta.env.VITE_Appwrite_app_collection_comment_id,
                 ID.unique(),
                 {
-                    accountId,
-                    accountType,
-                    userId
+                    belongsTo,
+                    commentor
                 }
             )
-            return newUser?newUser:null
+            return newCommit?newCommit:null
         } catch (error) {
             throw error
         }
     }
 
-    async getAllUsers(){
+    async getAllComments(){
         try {
             const response=await this.database.listDocuments(
                 import.meta.env.VITE_Appwrite_app_database_id,
-                import.meta.env.VITE_Appwrite_app_collection_user_id
+                import.meta.env.VITE_Appwrite_app_collection_comment_id,
             )
-
             return response?response.documents:null
         } catch (error) {
             throw error
@@ -41,4 +39,4 @@ class UserDbService{
     }
 }
 
-export const userDbService=new UserDbService()
+export const commentDbService=new CommentDbService()

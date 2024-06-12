@@ -16,9 +16,10 @@ export default function Signup() {
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
   const dispatch=useDispatch()
   const navigate=useNavigate()
-  const [btnTxt, setBtnTxt] = useState("Sign in");
+  const [error, setError] = useState('');
   const signup = async (data) => {
     try {
+      setError('')
       const accountDetails=await authService.signUp({email:data.email,password:data.password})
       if(accountDetails){
         const newNormalUser=await normalUserDbService.createNormalUser({
@@ -34,7 +35,7 @@ export default function Signup() {
         }
       }
     } catch (error) {
-      throw error
+      setError(error.message)
     }
   }
   return (
@@ -46,6 +47,7 @@ export default function Signup() {
         className="my-32 p-5 flex justify-center flex-col bg-white rounded-md
         basis-1/4 border-2 "
       >
+        {error&&<p className="text-xs text-red-600">{error}</p>}
         <p className="py-3 text-gray-900 font-form-header self-center text-xl font-semibold">
           Signup
         </p>

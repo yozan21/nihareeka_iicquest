@@ -12,8 +12,10 @@ export default function Login() {
   const users=useSelector(state=>state.user.users)
   const dispatch=useDispatch()
   const {register, handleSubmit, formState: { errors,isSubmitting }} = useForm()
+  const [error, setError] = useState('');
   const logIn=async (data)=>{
     try {
+      setError('')
       const accountDetails=await authService.logIn({email:data.email,password:data.password})
       if(accountDetails){
         const [loggedInUser]=users.filter(user=>user.accountId===accountDetails.$id)
@@ -24,7 +26,7 @@ export default function Login() {
 
       }
     } catch (error) {
-      console.log(error)
+      setError(error.message)
     }
   }
   return (
@@ -37,6 +39,7 @@ export default function Login() {
         basis-1/4 border-2 "
         onSubmit={handleSubmit(logIn)}
       >
+        {error&&<p className="text-xs text-red-600">{error}</p>}
         <p className="py-3 text-gray-900 font-form-header self-center text-xl font-semibold">
           Login
         </p>
