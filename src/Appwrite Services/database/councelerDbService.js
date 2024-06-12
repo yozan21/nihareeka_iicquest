@@ -35,6 +35,7 @@ class CouncelerDbService{
                 import.meta.env.VITE_Appwrite_app_database_id,
                 import.meta.env.VITE_Appwrite_app_collection_counceler_id
             )
+            return response?response.documents:null
         } catch (error) {
             throw error
         }
