@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import Spinner from "../components/Spinner"
 
 export default function Signup() {
+  console.log('entered')
   const [btnTxt, setBtnTxt] = useState("Sign in");
   const submitdata = data => {
     setBtnTxt(<Spinner resol={{ height: 12, width: 12 }} page={false} />);
@@ -15,7 +16,6 @@ export default function Signup() {
         // action="submit/post"
         className="my-9 p-5 flex justify-center flex-col bg-white rounded-md
       basis-2/6 border-2 "
-        onSubmit={handleSubmit}
       >
         <p className="py-3 text-gray-900 font-form-header self-center text-xl font-semibold">
           Signup
@@ -62,7 +62,6 @@ export default function Signup() {
         </div>
         <button
           className="bg-black py-2 rounded-md mt-3 font-form text-slate-100 uppercase h-[40px]"
-          onClick={handleSubmit}
         >
           {btnTxt}
         </button>

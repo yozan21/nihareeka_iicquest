@@ -42,6 +42,7 @@ class AuthService{
     async logOut(){
         try {
             await this.account.deleteSession(localStorage.getItem('sessionId'))
+            console.log('logged out')
         } catch (error) {
             throw error
         }

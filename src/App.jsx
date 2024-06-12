@@ -26,11 +26,6 @@ function App() {
         dispatch(normalUserActions.loadAllNormalUsers(allNormalUsers))
         const allUsers=await userDbService.getAllUsers()
         dispatch(userActions.loadAllUsers(allUsers))
-        const accountDetails=await authService.getCurrentUser()
-        if(accountDetails){
-          const [loggedInUser]=users.filter(user=>user.accountId===accountDetails.$id)
-          if(loggedInUser) dispatch(authActions.logIn({accountType:loggedInUser.accountType,userId:loggedInUser.userId}))
-        }
       } catch (error) {
         console.log(error)
       }
@@ -38,9 +33,21 @@ function App() {
         dispatch(loadingActions.setLoadingStatus(false))
       }
     }
-
     fetchData()
+    
   },[])
+
+  useEffect(()=>{
+    const setLogitDetails=async ()=>{
+      const accountDetails=await authService.getCurrentUser()
+      if(accountDetails){
+        const [loggedInUser]=users.filter(user=>user.accountId===accountDetails.$id)
+        if(loggedInUser) dispatch(authActions.logIn({accountType:loggedInUser.accountType,userId:loggedInUser.userId}))
+      }
+    }
+
+    setLogitDetails()
+  },[users])
 
 
   return (
