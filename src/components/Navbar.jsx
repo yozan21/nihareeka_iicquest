@@ -33,7 +33,7 @@ function Navbar() {
             color: isActive ? "black" : "white",
             borderRadius: isActive ? "10px" : " ",
           })}
-          className="text-white flex justify-center items-center gap-1 p-2"
+          className={`text-white  justify-center items-center gap-1 p-2 ${authStatus?'flex':'hidden'}`}
           to="/add/post"
         >
           <TfiThought />

@@ -36,12 +36,22 @@ function EventPost() {
         </div>
         <div className=" flex flex-col mb-5">
           <p className="font-form text-sm font-medium mb-1">Organized </p>
-          <input {...register('password')}
-            type="password"
-            id="password"
+          <input {...register('organized')}
+            type="type"
+            id="organized"
             className="border-2 border-slate-300 rounded-md py-2 px-4 focus:outline-none focus:border-black font-form focus:transition-opacity duration-200"
-            placeholder="Enter your password"
-            name="password"
+            placeholder="organized by..."
+            name="organized"
+          />
+        </div>
+        <div className=" flex flex-col mb-5">
+          <p className="font-form text-sm font-medium mb-1">Location </p>
+          <input {...register('location')}
+            type="type"
+            id="location"
+            className="border-2 border-slate-300 rounded-md py-2 px-4 focus:outline-none focus:border-black font-form focus:transition-opacity duration-200"
+            placeholder="Enter the location"
+            name="location"
           />
         </div>
         <button
