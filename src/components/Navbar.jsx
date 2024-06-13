@@ -46,6 +46,17 @@ function Navbar() {
             color: isActive ? "black" : "white",
             borderRadius: isActive ? "10px" : " ",
           })}
+          className={`text-white  justify-center items-center gap-1 p-2 ${authStatus && accountType === "C" ?'flex':'hidden'}`}
+          to="/counsellor/add/event"
+        >
+          Add Events
+        </NavLink>
+        <NavLink
+          style={({ isActive }) => ({
+            backgroundColor: isActive ? "white" : "",
+            color: isActive ? "black" : "white",
+            borderRadius: isActive ? "10px" : " ",
+          })}
           className={`text-white  justify-center items-center gap-1 p-2 ${authStatus && accountType === 'A' ?'flex':'hidden'}`}
           to="/admin/add/counsellor"
         >

@@ -9,18 +9,20 @@ class EventDbService{
         this.database=new Databases(this.client)
     }
 
-    async createEvent({organizer,address,imgId}){
+    async createEvent({organizer,address,imgId,name}){
         try {
             const newEvent=await this.database.createDocument(
                 import.meta.env.VITE_Appwrite_app_database_id,
                 import.meta.env.VITE_Appwrite_app_collection_event_id,
                 ID.unique(),
                 {
+                    name,
                     organizer,
                     address,
                     imgId
                 }
             )
+            return newEvent?newEvent:null
         } catch (error) {
             throw error
         }

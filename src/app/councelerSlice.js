@@ -13,6 +13,9 @@ const councelerSlice=createSlice({
         },
         addCounceler:(state,action)=>{
             state.councelers=action.payload
+        },
+        updateCounceler:(state,action)=>{
+            state.councelers=state.councelers.map(counceler=>counceler.$id===action.payload.id?action.payload.updatedCounceler:counceler)
         }
     }
 })

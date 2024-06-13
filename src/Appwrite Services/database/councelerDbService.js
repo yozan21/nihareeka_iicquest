@@ -28,9 +28,28 @@ class CouncelerDbService{
         }
     }
     
+    async updateCounceler({councelerId, email,password,name,events}){
+        try {
+            const updatedCounceler=await this.database.updateDocument(
+                import.meta.env.VITE_Appwrite_app_database_id,
+                import.meta.env.VITE_Appwrite_app_collection_counceler_id,
+                councelerId,
+                {
+                    email,
+                    password,
+                    name,
+                    events
+                }
+            )
+            return updatedCounceler?updatedCounceler:null
+        } catch (error) {
+            throw error
+        }
+    }
+
     async getAllCouncelers(){
         try {
-            const response=this.database.listDocuments(
+            const response=await this.database.listDocuments(
                 import.meta.env.VITE_Appwrite_app_database_id,
                 import.meta.env.VITE_Appwrite_app_collection_counceler_id
             )

@@ -26,7 +26,7 @@ function Post({ post }) {
     <div className="bg-white flex flex-col items-center rounded shadow-lg transition-all py-1" >
       <div className="self-start pl-8 flex items-center gap-2 px-2 py-3 ">
         <h2 className="text-2xl font-mono font-semibold py-3 ">
-          {poster?.name ?? "User name"}
+          {!post.isAnonymous?(poster?.name ?? "User name"):'Anonymous user'}
         </h2>
       </div>
       <div className="h-2/3 justify-center w-11/12 border-t border-slate-700">

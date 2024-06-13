@@ -9,9 +9,10 @@ import AddPostPage from '../pages/AddPostPage'
 import CommentPage from '../pages/commentPage'
 import AdminIndex from '../pages/AdminPannel'
 import AddCounsellor from '../pages/AddCounsellor'
+import EventPostPage from '../pages/EventPostPage'
 function Urls() {
   return (
-        <Routes>
+        <Routes> 
         {/* Routes for non authorized users  */}
         <Route path='/' element={<Homepage />}></Route>
         <Route path='/add/post' element={<AddPostPage />}></Route>
@@ -21,6 +22,7 @@ function Urls() {
         <Route path='/comment/:postId' element={<CommentPage/>}/>
         <Route path='/admin/home' element={<AdminIndex/>}/>
         <Route path='/admin/add/counsellor' element={<AddCounsellor/>}/>
+        <Route path='counsellor/add/event' element={<EventPostPage/>}/>
         </Routes>
   )
 }

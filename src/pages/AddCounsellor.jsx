@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import Navbar from "../components/Navbar";
@@ -8,11 +8,16 @@ import { councelerDbService } from '../Appwrite Services/database/councelerDbSer
 import { councelerActions } from '../app/councelerSlice';
 import { userDbService } from '../Appwrite Services/database/userDbService';
 import { userActions } from '../app/userSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 function AddCounsellor() {
     const navigate=useNavigate()
     const dispatch=useDispatch()
+    const {authStatus,accountType}=useSelector(state=>state.auth)
+    useEffect(()=>{
+      if(!authStatus||accountType!=='A') navigate('/')
+    },[authStatus,accountType])
+
     const { register, handleSubmit, formState: { errors,isSubmitting } } = useForm();
     const submitdata =async data => {
         try {
@@ -34,6 +39,8 @@ function AddCounsellor() {
         }
         
       }
+    
+
   return (
     <div className='min-h-screen w-screen bg-slate-200'>
       <Navbar/>
@@ -94,12 +101,12 @@ function AddCounsellor() {
             className="bg-black py-2 rounded-md mt-3 font-form text-slate-100 uppercase h-[40px]"
             type='submit'
           >
-            {isSubmitting?(<Spinner page={false}/>):('Sign in')}
+            {isSubmitting?(<Spinner page={false}/>):('Add')}
           </button>
         </form>
       </div>
     </div>
   )
 }
-
+ 
 export default AddCounsellor
