@@ -12,7 +12,13 @@ import { userDbService } from "./Appwrite Services/database/userDbService";
 import { userActions } from "./app/userSlice";
 import { authActions } from "./app/authSlice";
 import { loadingActions } from "./app/loadingSlice";
-import Comments from "./pages/Comment";
+import { postDbService } from "./Appwrite Services/database/postDbService";
+import { postActions } from "./app/postsSlice";
+import { commentDbService } from "./Appwrite Services/database/commentDbService";
+import { commentActions } from "./app/commentSlice";
+import { eventDbService } from "./Appwrite Services/database/eventDbService";
+import { eventActions } from "./app/eventSlice";
+import Comments from "./components/Comment";
 function App() {
   const dispatch = useDispatch();
   const users = useSelector((state) => state.user.users);
@@ -27,19 +33,13 @@ function App() {
         dispatch(normalUserActions.loadAllNormalUsers(allNormalUsers));
         const allUsers = await userDbService.getAllUsers();
         dispatch(userActions.loadAllUsers(allUsers));
-        const accountDetails = await authService.getCurrentUser();
-        if (accountDetails) {
-          const [loggedInUser] = users.filter(
-            (user) => user.accountId === accountDetails.$id
-          );
-          if (loggedInUser)
-            dispatch(
-              authActions.logIn({
-                accountType: loggedInUser.accountType,
-                userId: loggedInUser.userId,
-              })
-            );
-        }
+        const allPosts=await postDbService.getAllPosts()
+        console.log(allPosts)
+        dispatch(postActions.loadAllPosts(allPosts))
+        const allComments=await commentDbService.getAllComments()
+        dispatch(commentActions.loadAllComments(allComments))
+        const allEvents=await eventDbService.getAllEvents()
+        dispatch(eventActions.loadAllEvents(allEvents))
       } catch (error) {
         console.log(error);
       } finally {
@@ -50,6 +50,16 @@ function App() {
     fetchData();
   }, []);
 
+  useEffect(()=>{
+    const setLogitDetails=async ()=>{
+      const accountDetails=await authService.getCurrentUser()
+      if(accountDetails){
+        const [loggedInUser]=users.filter(user=>user.accountId===accountDetails.$id)
+        if(loggedInUser) dispatch(authActions.logIn({accountType:loggedInUser.accountType,userId:loggedInUser.userId}))
+      }
+    }
+    setLogitDetails()
+  },[users])
   return (
     <Urls />
     // <Comments />

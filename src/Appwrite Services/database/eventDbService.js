@@ -1,6 +1,6 @@
 import { Client,Databases,ID } from "appwrite";
 
-class CommentDbService{
+class EventDbService{
     constructor(){
         this.client=new Client().
         setEndpoint(import.meta.env.VITE_Appwrite_app_url).
@@ -9,29 +9,30 @@ class CommentDbService{
         this.database=new Databases(this.client)
     }
 
-    async createComment({belongsTo,posterName,content}){
+    async createEvent({organizer,address,imgId,name}){
         try {
-            const newCommit=this.database.createDocument(
+            const newEvent=await this.database.createDocument(
                 import.meta.env.VITE_Appwrite_app_database_id,
-                import.meta.env.VITE_Appwrite_app_collection_comment_id,
+                import.meta.env.VITE_Appwrite_app_collection_event_id,
                 ID.unique(),
                 {
-                    belongsTo,
-                    posterName,
-                    content
+                    name,
+                    organizer,
+                    address,
+                    imgId
                 }
             )
-            return newCommit?newCommit:null
+            return newEvent?newEvent:null
         } catch (error) {
             throw error
         }
     }
 
-    async getAllComments(){
+    async getAllEvents(){
         try {
             const response=await this.database.listDocuments(
                 import.meta.env.VITE_Appwrite_app_database_id,
-                import.meta.env.VITE_Appwrite_app_collection_comment_id,
+                import.meta.env.VITE_Appwrite_app_collection_event_id,
             )
             return response?response.documents:null
         } catch (error) {
@@ -40,4 +41,4 @@ class CommentDbService{
     }
 }
 
-export const commentDbService=new CommentDbService()
+export const eventDbService=new EventDbService()

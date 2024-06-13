@@ -10,7 +10,7 @@ function ViewEvents() {
         <div className="grid grid-cols-4 gap-10 w-[100vw] px-10 mt-10">
             <EventsList />
         </div>
-        {/* <EventPost /> */}
+        
 
 
 

@@ -18,10 +18,30 @@ class NormalUserDbService{
                 {
                     email,
                     password,
-                    name
+                    name,
+                    isBlocked:false
                 }
             )
             return newNormalUser?newNormalUser:null
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async updateNormalUser({normalUserId,email,password,name,isBlocked}){
+        try {
+            const updatedNormalUser=await this.database.updateDocument(
+                import.meta.env.VITE_Appwrite_app_database_id,
+                import.meta.env.VITE_Appwrite_app_collection_normal_user_id,
+                normalUserId,
+                {
+                    email,
+                    password,
+                    name,
+                    isBlocked
+                }
+            )
+            return updatedNormalUser?updatedNormalUser:null
         } catch (error) {
             throw error
         }

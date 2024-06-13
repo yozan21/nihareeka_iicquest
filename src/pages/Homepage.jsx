@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Marquee from "../components/Marquee";
-
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import Post from "./Post";
+import Spinner from "../components/Spinner";
 
 function Homepage() {
-  const { authStatus } = useSelector((state) => state.auth);
+  const navigate=useNavigate()
+  const {isAppLoading}=useSelector(state=>state.loading)
+  const { authStatus,accountType } = useSelector((state) => state.auth);
   const [text, setTest] = useState([
     "Believe you can and you're halfway there.",
     "Start where you are. Use what you have. Do what you can.",
@@ -14,16 +17,33 @@ function Homepage() {
     "Don't let what you cannot do interfere with what you can do.",
     "Success is not the key to happiness. Happiness is the key to success. If you love what you are doing, you will be successful.",
   ]);
+  const {posts}=useSelector(state=>state.post)
+  console.log(posts)
+  useEffect(()=>{
+    if(authStatus&&accountType==='A') navigate('/admin/home')
+  },[authStatus,accountType])
   return (
-    <div className="h-full w-screen bg-slate-200">
+    <div className="min-h-screen  bg-slate-200 overflow-x-hidden">
       <Navbar />
       <Marquee text={text} />
-      <div className="flex justify-center items-center gap-5 relative">
-        <div className="basis-3/5 flex flex-col gap-5 ">
-          <Post />
-          <Post />
-        </div>
-        <div className="basis-1/3">counselor</div>
+      <div className="flex justify-center items-center gap-5 relative overflow-x-hidden">
+        {
+          isAppLoading?(
+            <Spinner page={true}/>
+          ):(
+          <div className="basis-3/5 flex flex-col gap-5 ">
+            {
+              posts.length?(
+                posts.map(post=>
+                  <Post key={post.$id} post={post}/>
+                )
+              ):(
+                <p>You dont have any posts</p>
+              )
+            }
+          </div>
+          )
+        }
       </div>
     </div>
   );

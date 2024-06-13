@@ -6,29 +6,45 @@ import { storageService } from '../Appwrite Services/Storage/storage';
 import { useSelector,useDispatch } from 'react-redux';
 import { postActions } from '../app/postsSlice';
 import { authService } from '../Appwrite Services/Authentication/authentication';
+import { useNavigate } from 'react-router-dom';
+import Spinner from './Spinner';
 function AddPost() {
     // const fileInputRef = useRef(null);
     const [imagePreview, setImagePreview] = useState(uploadInsertImage);
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, formState: { errors,isSubmitting } } = useForm();
+    const {normalUsers}=useSelector(state=>state.normalUser)
+    const {councelers}=useSelector(state=>state.counceler)
+    const {accountType,userId}=useSelector(state=>state.auth)
+    const [currentUser]=accountType==='U'?normalUsers.filter(normalUser=>normalUser.$id===userId):
+    councelers.filter(counceler=>counceler.$id===userId)
     const dispatch=useDispatch()
+    const navigate=useNavigate()
     const submitdata =async data => {
-        let fileId=null
-        if(data.image){
-            const newFile=await storageService.uploadImage(data.image[0])
-            if(newFile) fileId=newFile.$id
-        }
-        const accountDetails=await authService.getCurrentUser()
-        if(accountDetails){
-            const newPost=await postDbService.createPost({
-                accountId:accountDetails.$id,
-                date:new Date().toLocaleDateString(),
-                imgId:fileId,
-                content:data.problem,
-                isAnonymous:data.anonymous
-            })
-            if(newPost){
-                dispatch(postActions.addPost(newPost))
-            }
+        try {
+            if(!currentUser.isBlocked){
+                let fileId=null
+                if(data.image.length){
+                    const newFile=await storageService.uploadImage(data.image[0])
+                    if(newFile) fileId=newFile.$id
+                }
+                const accountDetails=await authService.getCurrentUser()
+                if(accountDetails){
+                    const newPost=await postDbService.createPost({
+                        accountId:accountDetails.$id,
+                        date:new Date().toLocaleDateString(),
+                        imgId:fileId,
+                        content:data.problem,
+                        isAnonymous:data.anonymous
+                    })
+                    if(newPost){
+                        dispatch(postActions.addPost(newPost))
+                        navigate('/')
+        
+                    }
+                }
+            }else alert('you are blocked')
+        } catch (error) {
+            throw error
         }
     };
 
@@ -78,7 +94,7 @@ function AddPost() {
                         className='w-full rounded-md p-4 h-40 border border-gray-300 focus:border-indigo-500 focus:outline-none focus:ring'
                         id="problem"
                     ></textarea>
-                    {errors.problem && <span className='block text-red-500 mt-2'>*{errors.problem.message}</span>}
+                    {errors.problem && <span className=' text-red-500 text-xs mt-2'>*{errors.problem.message}</span>}
                 </div>
                 <div className='w-full mb-4 flex items-center'>
                     <input 
@@ -89,7 +105,9 @@ function AddPost() {
                     />
                     <label className='ml-2 text-sm font-medium text-gray-700' htmlFor="anonymous">Add Anonymously?</label>
                 </div>
-                <button className='block w-full bg-black text-white font-semibold hover:font-bold py-2 rounded-md shadow-md'>Submit</button>
+                <button className='block w-full bg-black text-white font-semibold hover:font-bold py-2 rounded-md shadow-md'>
+                {isSubmitting?(<Spinner page={false}/>):'Add'}
+                </button>
             </form>
         </div>
     );

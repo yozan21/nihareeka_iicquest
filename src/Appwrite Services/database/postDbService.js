@@ -20,7 +20,7 @@ class PostDbService{
                     date,
                     imgId,
                     content,
-                    likes:0,
+                    likes:[],
                     comments:[],
                     isAnonymous
                 }
