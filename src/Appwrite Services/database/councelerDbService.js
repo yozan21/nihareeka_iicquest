@@ -19,7 +19,8 @@ class CouncelerDbService{
                     email,
                     password,
                     events:[],
-                    name
+                    name,
+                    isBlocked:false
                 }
             )
             return newCounceler?newCounceler:null
@@ -28,7 +29,7 @@ class CouncelerDbService{
         }
     }
     
-    async updateCounceler({councelerId, email,password,name,events}){
+    async updateCounceler({councelerId, email,password,name,events,isBlocked}){
         try {
             const updatedCounceler=await this.database.updateDocument(
                 import.meta.env.VITE_Appwrite_app_database_id,
@@ -38,7 +39,8 @@ class CouncelerDbService{
                     email,
                     password,
                     name,
-                    events
+                    events,
+                    isBlocked
                 }
             )
             return updatedCounceler?updatedCounceler:null

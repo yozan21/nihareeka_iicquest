@@ -23,56 +23,66 @@ function Post({ post }) {
     navigate(`/comment/${post.$id}`)
   }
   return (
-    <div className="bg-white flex flex-col items-center rounded shadow-lg transition-all py-1" >
-      <div className="self-start pl-8 flex items-center gap-2 px-2 py-3 ">
-        <h2 className="text-2xl font-mono font-semibold py-3 ">
-          {!post.isAnonymous?(poster?.name ?? "User name"):'Anonymous user'}
-        </h2>
-      </div>
-      <div className="h-2/3 justify-center w-11/12 border-t border-slate-700">
-        <p className="font-sans text-lg py-5">
-          {post.content}
-        </p>
-        {post.imgId? (<img  src={storageService.getFilePreview(post.imgId)} className=""/>):''}
-      </div>
-      <div className="flex justify-between w-6/12 py-15 pt-5 rounded">
-        <button className="flex items-center gap-2"
-        disabled={!authStatus}
-        onClick={()=>{
-          const likePost=async ()=>{
-            try {
-              if(!post.likes.includes(userId)){
-                const updatedPost=await postDbService.updatePost({
-                  postId:post.$id,
-                  ...post,
-                  likes:[...post.likes,userId]
-                })
-                dispatch(postActions.updatePost({id:updatedPost.$id,updatedPost}))
+    <>
+      {!poster.isBlocked?(
+          <div className="bg-white flex flex-col items-center rounded shadow-lg transition-all py-1" >
+          <div className="self-start pl-8 flex items-center gap-2 px-2 py-3 ">
+            <h2 className="text-2xl font-mono font-semibold py-3 ">
+              {!post.isAnonymous?(poster?.name ?? "User name"):'Anonymous user'}
+            </h2>
+            {posterDetails.accountType==='C'&&!post.isAnonymous&&<span className="bg-red-400 rounded-md p-1 text-xs">Counsellor</span>}
+          </div>
+          <div className="h-2/3 justify-center w-11/12 border-t border-slate-700">
+            <p className="font-sans text-lg py-5">
+              {post.content}
+            </p>
+            {post.imgId? (<img  src={storageService.getFilePreview(post.imgId)} className=""/>):''}
+          </div>
+          <div className="flex justify-between w-6/12 py-15 pt-5 rounded">
+            <button className="flex items-center gap-2"
+            disabled={!authStatus}
+            onClick={()=>{
+              const likePost=async ()=>{
+                try {
+                  if(!post.likes.includes(userId)){
+                    const updatedPost=await postDbService.updatePost({
+                      postId:post.$id,
+                      ...post,
+                      likes:[...post.likes,userId]
+                    })
+                    dispatch(postActions.updatePost({id:updatedPost.$id,updatedPost}))
+                  }
+                  else{
+                    const updatedPost=await postDbService.updatePost({
+                      postId:post.$id,
+                      ...post,
+                      likes:post.likes.filter(likersId=>likersId!==userId)
+                    })
+                    dispatch(postActions.updatePost({id:updatedPost.$id,updatedPost}))
+                  }
+                } catch (error) {
+                  throw error
+                }
               }
-              else{
-                const updatedPost=await postDbService.updatePost({
-                  postId:post.$id,
-                  ...post,
-                  likes:post.likes.filter(likersId=>likersId!==userId)
-                })
-                dispatch(postActions.updatePost({id:updatedPost.$id,updatedPost}))
-              }
-            } catch (error) {
-              throw error
-            }
-          }
-          likePost()
-        }}
-        >
-          <BiSolidUpvote className="h-6 w-6 border-2 rounded border-black hover:border-red-600 hover:text-red-600" />
-          <span className="text-xs text-wrap basis-14">{post.likes.length} upvotes</span>
-        </button>
-        <button className="flex items-center gap-2" disabled={!authStatus} onClick={handleClick}>
-          <FaComment className="h-6 w-12 text-xl border-2 rounded border-black hover:border-red-600 hover:text-red-600" />
-          <span className="text-xs text-wrap basis-14">{post.comments.length}</span>
-        </button>
-      </div>
-    </div>
+              likePost()
+            }}
+            >
+              <BiSolidUpvote className={`h-6 w-6 border-2 rounded border-black 
+              ${authStatus? `hover:border-red-600 hover:text-red-600`:'' }${post.likes.includes(userId)?'text-red-600 border-red-600':''}`}/>
+              <span className="text-xs text-wrap basis-14">{post.likes.length} upvotes</span>
+            </button>
+            <button className="flex items-center gap-2" disabled={!authStatus} onClick={handleClick}>
+              <FaComment className={`h-6 w-12 border-2 rounded border-black ${authStatus? `hover:border-red-600 hover:text-red-600`:'' }`} />
+              <span className="text-xs text-wrap basis-14">{post.comments.length}</span>
+            </button>
+          </div>
+        </div>
+
+      ):(
+        <></>
+      )}
+    </>
+      
   );
 }
 

@@ -11,38 +11,42 @@ import { useSelector,useDispatch } from 'react-redux';
 import { storageService } from '../Appwrite Services/Storage/storage';
 function EventPost() {
   const dispatch=useDispatch()
-  console.log(useSelector(state => state.counceler))
-  const { userId } = useSelector(state => state.auth)
+  const { userId,accountType } = useSelector(state => state.auth)
   const { councelers } = useSelector(state => state.counceler)
+  const {normalUsers}=useSelector(state=>state.normalUser)
   const [currentCounceler] = councelers.filter(counceler => counceler.$id === userId)
   const [imagePreview, setImagePreview] = useState(uploadInsertImage);
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm()
+  const [currentUser]=accountType==='U'?normalUsers.filter(normalUser=>normalUser.$id===userId):
+    councelers.filter(counceler=>counceler.$id===userId)
   console.log(councelers)
   const submitdata = async data => {
     try {
-      let fileId = null
-      if (data.image.length) {
-        const newFile = await storageService.uploadImage(data.image[0])
-        if (newFile) fileId = newFile.$id
-      }
-      const newEvent = await eventDbService.createEvent({
-        name:data.name,
-        organizer: data.organized,
-        address: data.location,
-        imgId:fileId
-      })
-      if(newEvent){
-        console.log('curr counceler',currentCounceler)
-        const updatedCounceler=await councelerDbService.updateCounceler({
-          councelerId:currentCounceler.$id,
-          ...currentCounceler,
-          events:[...currentCounceler.events,newEvent.$id]
-        })
-        if(updatedCounceler){
-          dispatch(eventActions.addEvent(newEvent))
-          dispatch(councelerActions.updateCounceler({id:updatedCounceler.$id,updatedCounceler}))
+      if(!currentUser.isBlocked){
+        let fileId = null
+        if (data.image.length) {
+          const newFile = await storageService.uploadImage(data.image[0])
+          if (newFile) fileId = newFile.$id
         }
-      }
+        const newEvent = await eventDbService.createEvent({
+          name:data.name,
+          organizer: data.organized,
+          address: data.location,
+          imgId:fileId
+        })
+        if(newEvent){
+          console.log('curr counceler',currentCounceler)
+          const updatedCounceler=await councelerDbService.updateCounceler({
+            councelerId:currentCounceler.$id,
+            ...currentCounceler,
+            events:[...currentCounceler.events,newEvent.$id]
+          })
+          if(updatedCounceler){
+            dispatch(eventActions.addEvent(newEvent))
+            dispatch(councelerActions.updateCounceler({id:updatedCounceler.$id,updatedCounceler}))
+          }
+        }
+      } else alert('you are blocked')
     } catch (error) {
       console.log(error)
     }

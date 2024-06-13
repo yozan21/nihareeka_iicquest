@@ -23,10 +23,10 @@ function Homepage() {
     if(authStatus&&accountType==='A') navigate('/admin/home')
   },[authStatus,accountType])
   return (
-    <div className="min-h-screen w-screen bg-slate-200">
+    <div className="min-h-screen  bg-slate-200 overflow-x-hidden">
       <Navbar />
       <Marquee text={text} />
-      <div className="flex justify-center items-center gap-5 relative">
+      <div className="flex justify-center items-center gap-5 relative overflow-x-hidden">
         {
           isAppLoading?(
             <Spinner page={true}/>

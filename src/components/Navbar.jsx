@@ -69,22 +69,8 @@ function Navbar() {
             color: isActive ? "black" : "white",
             borderRadius: isActive ? "10px" : " ",
           })}
-          className={`text-white  justify-center items-center gap-1 p-2 ${authStatus && accountType === 'A' ?'flex':'hidden'}`}  
-          to="/admin/events/manage"
-        >
-          <MdEventAvailable />
-          Events
-        </NavLink>
-        
-        <NavLink
-          style={({ isActive }) => ({
-            backgroundColor: isActive ? "white" : "",
-            color: isActive ? "black" : "white",
-            borderRadius: isActive ? "10px" : " ",
-          })}
-          className={`text-white  justify-center items-center gap-1 p-2 ${accountType !==  'A' ?'flex':'hidden'}`}
+          className={`text-white  justify-center items-center gap-1 p-2 ${authStatus && accountType !== 'A' ?'flex':'hidden'}`}  
           to="/events"
-          
         >
           <MdEventAvailable />
           Events
