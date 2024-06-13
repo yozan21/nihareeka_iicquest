@@ -6,14 +6,17 @@ import { adminReducer } from "./adminSlice";
 import { normalUserReducer } from "./normalUserSlice";
 import { userReducer } from "./userSlice";
 import { authReducer } from "./authSlice";
-
+import { postReducer } from "./postsSlice";
+import { commentReducer } from "./commentSlice";
 const rootReducer=combineReducers({
     auth:authReducer,
     loading:loadingReducer,
     counceler:councelerReducer,
     admin:adminReducer,
     normalUser:normalUserReducer,
-    user:userReducer
+    user:userReducer,
+    post:postReducer,
+    comment:commentReducer
 })
 
 export const store=configureStore({

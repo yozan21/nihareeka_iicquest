@@ -10,6 +10,9 @@ const normalUserSlice=createSlice({
     reducers:{
         loadAllNormalUsers:(state,action)=>{
             state.normalUsers=action.payload
+        },
+        addNormalUser:(state,action)=>{
+            state.normalUsers=[...state.normalUsers,action.payload]
         }
     }
 })

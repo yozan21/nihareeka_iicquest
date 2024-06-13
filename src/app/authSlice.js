@@ -14,6 +14,11 @@ const authSlice=createSlice({
             state.authStatus=true
             state.accountType=action.payload.accountType
             state.userId=action.payload.userId
+        },
+        logOut:(state,action)=>{
+            state.authStatus=false,
+            state.accountType=''
+            state.userId=''
         }
     }
 })

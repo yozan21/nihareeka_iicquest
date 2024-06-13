@@ -18,7 +18,6 @@ class NormalUserDbService{
                 {
                     email,
                     password,
-                    posts:[],
                     name
                 }
             )
@@ -30,7 +29,7 @@ class NormalUserDbService{
 
     async getAllNormalUsers(){
         try {
-            const response=this.database.listDocuments(
+            const response=await this.database.listDocuments(
                 import.meta.env.VITE_Appwrite_app_database_id,
                 import.meta.env.VITE_Appwrite_app_collection_normal_user_id
             )
