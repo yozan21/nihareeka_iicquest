@@ -1,38 +1,36 @@
-import { Databases,Client,ID } from "appwrite";
+import { Client,Databases,ID } from "appwrite";
 
-class CouncelerDbService{
+class EventDbService{
     constructor(){
         this.client=new Client().
         setEndpoint(import.meta.env.VITE_Appwrite_app_url).
         setProject(import.meta.env.VITE_Appwrite_project_id)
-        
+
         this.database=new Databases(this.client)
     }
 
-    async createCounceler({email,password,name}){
+    async createEvent({organizer,address,imgId}){
         try {
-            const newCounceler=await this.database.createDocument(
+            const newEvent=await this.database.createDocument(
                 import.meta.env.VITE_Appwrite_app_database_id,
-                import.meta.env.VITE_Appwrite_app_collection_counceler_id,
+                import.meta.env.VITE_Appwrite_app_collection_event_id,
                 ID.unique(),
                 {
-                    email,
-                    password,
-                    events:[],
-                    name
+                    organizer,
+                    address,
+                    imgId
                 }
             )
-            return newCounceler?newCounceler:null
         } catch (error) {
             throw error
         }
     }
-    
-    async getAllCouncelers(){
+
+    async getAllEvents(){
         try {
-            const response=this.database.listDocuments(
+            const response=await this.database.listDocuments(
                 import.meta.env.VITE_Appwrite_app_database_id,
-                import.meta.env.VITE_Appwrite_app_collection_counceler_id
+                import.meta.env.VITE_Appwrite_app_collection_event_id,
             )
             return response?response.documents:null
         } catch (error) {
@@ -41,4 +39,4 @@ class CouncelerDbService{
     }
 }
 
-export const councelerDbService=new CouncelerDbService()
+export const eventDbService=new EventDbService()

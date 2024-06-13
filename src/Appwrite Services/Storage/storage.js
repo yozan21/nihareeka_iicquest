@@ -12,7 +12,7 @@ class StorageService{
     async uploadImage(file){
         try {
             const newFile=await this.storage.createFile(
-                import.meta.env.VITE_Appwrite_app_postImgs_bucket_id,
+                import.meta.env.VITE_Appwrite_app_imgs_bucket_id,
                 ID.unique(),
                 file
             )
@@ -25,7 +25,7 @@ class StorageService{
     getFilePreview(fileId){
         try {
             return this.storage.getFilePreview(
-                import.meta.env.VITE_Appwrite_app_postImgs_bucket_id,
+                import.meta.env.VITE_Appwrite_app_imgs_bucket_id,
                 fileId
             )
         } catch (error) {

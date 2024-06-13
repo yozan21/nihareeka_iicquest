@@ -6,29 +6,37 @@ import { storageService } from '../Appwrite Services/Storage/storage';
 import { useSelector,useDispatch } from 'react-redux';
 import { postActions } from '../app/postsSlice';
 import { authService } from '../Appwrite Services/Authentication/authentication';
+import { useNavigate } from 'react-router-dom';
 function AddPost() {
     // const fileInputRef = useRef(null);
     const [imagePreview, setImagePreview] = useState(uploadInsertImage);
     const { register, handleSubmit, formState: { errors } } = useForm();
     const dispatch=useDispatch()
+    const navigate=useNavigate()
     const submitdata =async data => {
-        let fileId=null
-        if(data.image){
-            const newFile=await storageService.uploadImage(data.image[0])
-            if(newFile) fileId=newFile.$id
-        }
-        const accountDetails=await authService.getCurrentUser()
-        if(accountDetails){
-            const newPost=await postDbService.createPost({
-                accountId:accountDetails.$id,
-                date:new Date().toLocaleDateString(),
-                imgId:fileId,
-                content:data.problem,
-                isAnonymous:data.anonymous
-            })
-            if(newPost){
-                dispatch(postActions.addPost(newPost))
+        try {
+            let fileId=null
+            if(data.image.length){
+                const newFile=await storageService.uploadImage(data.image[0])
+                if(newFile) fileId=newFile.$id
             }
+            const accountDetails=await authService.getCurrentUser()
+            if(accountDetails){
+                const newPost=await postDbService.createPost({
+                    accountId:accountDetails.$id,
+                    date:new Date().toLocaleDateString(),
+                    imgId:fileId,
+                    content:data.problem,
+                    isAnonymous:data.anonymous
+                })
+                if(newPost){
+                    dispatch(postActions.addPost(newPost))
+                    navigate('/')
+    
+                }
+            }
+        } catch (error) {
+            throw error
         }
     };
 

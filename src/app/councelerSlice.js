@@ -10,6 +10,9 @@ const councelerSlice=createSlice({
     reducers:{
         loadAllCounceler:(state,action)=>{
             state.councelers=action.payload
+        },
+        addCounceler:(state,action)=>{
+            state.councelers=action.payload
         }
     }
 })

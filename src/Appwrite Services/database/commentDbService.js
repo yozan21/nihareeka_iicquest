@@ -9,7 +9,7 @@ class CommentDbService{
         this.database=new Databases(this.client)
     }
 
-    async createComment({belongsTo,commentor}){
+    async createComment({belongsTo,posterName,content}){
         try {
             const newCommit=this.database.createDocument(
                 import.meta.env.VITE_Appwrite_app_database_id,
@@ -17,7 +17,8 @@ class CommentDbService{
                 ID.unique(),
                 {
                     belongsTo,
-                    commentor
+                    posterName,
+                    content
                 }
             )
             return newCommit?newCommit:null
